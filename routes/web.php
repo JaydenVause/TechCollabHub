@@ -7,6 +7,12 @@ use Inertia\Inertia;
 use App\Http\Controllers\CreateProjectController;
 use App\Http\Controllers\ViewProjectController;
 use App\Http\Controllers\ProjectImageController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MessageUserController;
+use App\Http\Controllers\InboxController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\FindTopicController;
+use App\Http\Controllers\BrowseProjectsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,34 +25,53 @@ use App\Http\Controllers\ProjectImageController;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [HomeController::class, 'index'])->name('dashboard');;
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/create-project', [CreateProjectController::class, 'index'])->name('project.create');
+
+    Route::post('/create-project', [CreateProjectController::class, 'create']);
+
+    Route::get('/message-user/{userId}', [MessageUserController::class, 'index']);
+
+     Route::post('/message-user/{userId}', [MessageUserController::class, 'send'])->middleware('auth');
+
+     Route::get('/inbox', [InboxController::class, 'index'])->name('inbox');
 });
 
-Route::get('/create-project', function(){
-    return Inertia::render("Project/New", ['csrf_token' => csrf_token()]);
+
+Route::get('/about', function (){
+    return Inertia::render('About');
 });
+
+Route::get('/services', function (){
+    return Inertia::render('Services');
+});
+
+Route::get('/contact', function (){
+    return Inertia::render('Contact');
+});
+
+Route::get('/messages/{messageId}', [ChatController::class, 'index']);
+
+Route::get('/topics/{topicName}', [FindTopicController::class, 'find']);
+
+Route::get('/projects', [BrowseProjectsController::class, 'index'])->name('projects.browse');
+
 
 Route::get('/projects/{projectId}', [ViewProjectController::class, 'view']);
 
-Route::post('/create-project', [CreateProjectController::class, 'create']);
+Route::middleware(['throttle:ip_address'])->group(function (){
+   
+    Route::post('/project-image', [ProjectImageController::class, 'upload']);
+});
 
-Route::post('/project-image', [ProjectImageController::class, 'upload']);
+
 Route::get('/project-images/{filePath}', [ProjectImageController::class, 'get']);
 
 require __DIR__.'/auth.php';

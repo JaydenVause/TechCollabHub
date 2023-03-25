@@ -4,12 +4,12 @@
 	import ImageTool from '@editorjs/image';
 	import { usePage } from '@inertiajs/vue3';
 
-	const emit = defineEmits('blockEditor');
+	const emit = defineEmits(['blockEditor']);
 
 	
 
 	function createFormElement(){
-	  let editorPage = document.querySelector('#page2');
+	  let editorPage = document.querySelector('#page3');
 	  let editorEl = document.createElement('div');
 	  let p = document.createElement('p');
 

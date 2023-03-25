@@ -47,7 +47,9 @@ class ProjectFactory extends Factory
             'user_id' => User::factory()->create(),
             'name' => fake()->name(),
             'description' => fake()->text(),
-            'blocks' => $blocks
+            'blocks' => $blocks,
+            'image' => fake()->image(),
+            'created_at' => fake()->dateTimeBetween()
         ];
     }
 }

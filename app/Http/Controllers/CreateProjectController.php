@@ -6,17 +6,36 @@ use Illuminate\Http\Request;
 use App\Rules\ValidBlock;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Project;
-
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Topic;
 class CreateProjectController extends Controller
 {
+
+
+    public function index(){
+
+
+        $topics = Topic::all();
+
+        return Inertia::render("Project/New", [
+            'csrf_token' => csrf_token(),
+            'topics' => $topics
+        ]);
+    }
+
+
     /**
      * creates users project
      */
 
     public function create(Request $request){
         $validated = $request->validate([
-            'project_name' => ['string', 'required', 'max:100'],
+            'project_name' => ['string', 'required', 'max:100', 'unique:App\Models\Project,name'],
             'project_description' => ['string', 'required', 'max:255'],
+            'project_image' => 'image|max:20000|required',
+            'topics' => 'required|array',
+            'topic.*' => 'required|integer|max:855',
             'blocks' => ['array', 'required' , 'max:10000'],
             'blocks.*' => ['array', 'min:1', 'max:4'],
             'blocks.*.id' => ['required', 'string', 'max:100'],
@@ -78,12 +97,26 @@ class CreateProjectController extends Controller
         
         $blockData =  json_encode($blockData);
 
+        $image = $validated['project_image'];
+
+        $path = Storage::disk('project-images')->putFile($image);
+
         $project = Project::create([
             'user_id' => $user->id,
             'name' => $validated['project_name'],
             'description'=> $validated['project_description'],
-            'blocks' => $blockData
+            'blocks' => $blockData,
+            'image' => $path
         ]);
+
+        foreach($validated['topics'] as $topic_id){
+            $topic = Topic::where('id', $topic_id)->first();
+            $project->topics()->attach($topic);
+        }
+
+        $request->session()->flash('message', 'Create project successfully!');
+        
+        return to_route('dashboard');
 
     }
 }

@@ -12,8 +12,8 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+        <div class="min-h-screen bg-gray-800">
+            <nav class="bg-gray-800 border-b border-gray-100 fixed w-full z-10">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -21,29 +21,38 @@ const showingNavigationDropdown = ref(false);
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
-                                    />
+                                    <ApplicationLogo />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    Home
                                 </NavLink>
+                                <NavLink :href="route('projects.browse')" :active="route().current('projects.browse')">
+                                    Browse Projects
+                                </NavLink>
+                                <template v-if="$page.props.auth.user">
+                                    <NavLink :href="route('project.create')" :active="route().current('project.create')">
+                                        Create Project
+                                    </NavLink>
+                                    <NavLink :href="route('inbox')" :active="route().current('inbox')">
+                                        Inbox
+                                    </NavLink>
+                                </template>
                             </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <!-- Settings Dropdown -->
-                            <div class="ml-3 relative">
-                                <Dropdown align="right" width="48">
+                            <div class="ml-3 relative " >
+                                <Dropdown align="right" width="48" v-if="$page.props.auth.user" >
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md  text-white  bg-purple-700 hover:text-white focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -70,6 +79,16 @@ const showingNavigationDropdown = ref(false);
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
+
+                                <div v-else>
+                                    <nav>
+                                        <ul class="flex gap-3 text-lg">
+                                            <li><Link class="text-white hover:underline" :href="route('dashboard')">Home</Link></li>
+                                            <li><Link class="text-white hover:underline" :href="route('login')">Login</Link></li>
+                                            <li><Link class="text-white hover:underline" :href="route('register')">Register</Link></li>
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
                         </div>
 
@@ -77,7 +96,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="-mr-2 flex items-center sm:hidden">
                             <button
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
-                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                             >
                                 <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
@@ -113,40 +132,83 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            Home
                         </ResponsiveNavLink>
-                    </div>
+                        <ResponsiveNavLink :href="route('project.create')" :active="route().current('project.create')">
+                            Create Project
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('inbox')" :active="route().current('inbox')">
+                                        Inbox
+                                    </ResponsiveNavLink>
+                        <template  v-if="$page.props.auth.user">
+                        <!-- Responsive Settings Options -->
+                            <div class="pt-4 pb-1 border-t border-gray-200">
+                                <div class="px-4">
+                                    <div class="font-medium text-base text-white">
+                                        {{ $page.props.auth.user.name }}
+                                    </div>
+                                    <div class="font-medium text-sm text-white">{{ $page.props.auth.user.email }}</div>
+                                </div>
 
-                    <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
-                        <div class="px-4">
-                            <div class="font-medium text-base text-gray-800">
-                                {{ $page.props.auth.user.name }}
+                                <div class="mt-3 space-y-1">
+                                    <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                                    <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                                        Log Out
+                                    </ResponsiveNavLink>
+                                </div>
                             </div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
+                        </template>
+                        <template v-else>
+                            <ResponsiveNavLink class="text-white hover:underline" :href="route('login')">Login</ResponsiveNavLink>
+                            <ResponsiveNavLink class="text-white hover:underline" :href="route('register')">Register</ResponsiveNavLink>
+                        </template>
                     </div>
+
+                    
+                    
                 </div>
             </nav>
 
-            <!-- Page Heading -->
-            <header class="bg-white shadow" v-if="$slots.header">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
-                </div>
-            </header>
+
+                
+            
+
 
             <!-- Page Content -->
             <main>
-                <slot />
+                    <div class="py-16">
+                        <div v-if="$page.props.message" class="text-green-700 bg-green-200 py-4 px-3 ">
+                            {{$page.props.message}}
+                        </div>
+                    
+                        <slot />
+                    </div>
+                
             </main>
+            <footer class="bg-gray-800 py-12 px-10">
+                <div class="container mx-auto">
+                  <div class="flex flex-wrap justify-between items-center">
+                    <div class="w-full md:w-1/4 lg:w-1/6">
+                      <h4 class="text-lg font-bold mb-4 text-gray-100">Links</h4>
+                      <ul>
+                        <li><Link href="/" class="text-gray-400 hover:text-white transition-colors duration-300">Home</Link></li>
+                        <li><Link href="/about" class="text-gray-400 hover:text-white transition-colors duration-300">About Us</Link></li>
+                        <li><Link href="/services" class="text-gray-400 hover:text-white transition-colors duration-300">Services</Link></li>
+                        <li><Link href="/contact" class="text-gray-400 hover:text-white transition-colors duration-300">Contact Us</Link></li>
+                      </ul>
+                    </div>
+                    
+                    <div class="w-full md:w-1/4 lg:w-1/6">
+                      <h4 class="text-lg font-bold mb-4 text-gray-100">Social Media</h4>
+                      <ul>
+                        <li><Link href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Facebook</Link></li>
+                        <li><Link href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Twitter</Link></li>
+                        <li><Link href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Instagram</Link></li>
+                      </ul>
+                    </div>
+                </div>
+                </div>
+                </footer>
         </div>
     </div>
 </template>

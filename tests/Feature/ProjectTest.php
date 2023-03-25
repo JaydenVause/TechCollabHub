@@ -10,6 +10,8 @@ use App\Models\Project;
 use App\Generators\BlockGenerator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use App\Models\Topic;
+
 
 class ProjectTest extends TestCase
 {
@@ -24,6 +26,12 @@ class ProjectTest extends TestCase
         $response = $this->actingAs($user)->get('/create-project');
 
         $response->assertStatus(200);
+    }
+
+    public function test_access_non_user_new_project_page(){
+        $response = $this->get('/create-project');
+
+        $response->assertStatus(302);
     }
 
     public function test_upload_project_image(){
@@ -51,10 +59,19 @@ class ProjectTest extends TestCase
 
     public function test_create_new_project(){
         $user = User::factory()->create();
+        $topics = Topic::factory()->count(10)->create();
+        $project_image = UploadedFile::fake()->image('projectImage.png');
+        $topic_ids = [];
+
+        foreach($topics as $topic){
+            $topic_ids[] = $topic->id;
+        }
 
         $data = [
             'project_name' => fake()->name(),
             'project_description' => fake()->text(),
+            'topics' => $topic_ids,
+            'project_image' => $project_image,
             'blocks' => []
         ];
 
@@ -78,8 +95,43 @@ class ProjectTest extends TestCase
             'user_id' => $user->id,
             'name' => $data['project_name'],
             'description' => $data['project_description'],
-            'blocks' => $this->castAsJson($data['blocks'])
+            'blocks' => $this->castAsJson($data['blocks']),
+            'image' => $project_image->hashName()
         ]);
+
+        foreach($topic_ids as $topic_id){
+            $this->assertDatabaseHas('project_topic', [
+                'topic_id' => $topic_id
+            ]);
+        }
+
+        Storage::disk('project-images')->assertExists($project_image->hashName());
+    }
+
+    public function test_access_non_user_new_project(){
+        $data = [
+            'project_name' => fake()->name(),
+            'project_description' => fake()->text(),
+            'blocks' => []
+        ];
+
+        for($i = 0; $i < 3; $i ++){
+            #generate a new block for content
+            if($i == 0){
+                $data['blocks'][] = BlockGenerator::generate('header');    
+            }elseif ($i == 1) {
+                $data['blocks'][] = BlockGenerator::generate();
+            }elseif($i == 2){
+                $data['blocks'][] = BlockGenerator::generate('image');
+            }
+            
+        }
+
+        // dd($this->castAsJson($data['blocks']));
+
+        $response = $this->post('/create-project', $data);
+
+        $response->assertStatus(302);
     }
 
     public function test_view_project(){

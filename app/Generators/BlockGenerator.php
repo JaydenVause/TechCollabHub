@@ -22,11 +22,14 @@ class BlockGenerator {
 		return [
 			'id' => fake()->ean8(),
 			'type' => 'image',
+			
 			'data' => [
+
+				'caption' => fake()->text(100),
 				'file' => [
 					'url' => 'https://via.placeholder.com/640x480.png/0033ff?text=animals+animi'
 				],
-				'caption' => fake()->text(100),
+				
 				'stretched' => false,
 				'withBackground' => false,
 				'withBorder' => false

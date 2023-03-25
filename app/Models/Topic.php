@@ -6,15 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Project extends Model
+class Topic extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
 
-    protected $fillable = ['user_id', 'name', 'description', 'blocks', 'image'];
-
-    public function topics() : BelongsToMany
+    public function projects() : BelongsToMany
     {
-        return $this->belongsToMany(Topic::class);
+        return $this->belongsToMany(Project::class);
     }
 }
