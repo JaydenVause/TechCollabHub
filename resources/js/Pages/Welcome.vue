@@ -40,8 +40,8 @@ import Swiper from '@/Components/Swiper.vue';
               </section>
             <section>
                 <div class="w-full spacey">
-                    <div class=" m-auto p-10">
-                        <h1 class="text-2xl font-extrabold text-white">Most recent projects...</h1>
+                    <div class=" m-auto p-3 md:px-10 md:py-4">
+                        <h1 class="text-2xl font-extrabold text-white my-4">Most recent projects...</h1>
                         <Swiper :passedProjects="$page.props.most_recent_projects" />   
                     </div>
                 </div>

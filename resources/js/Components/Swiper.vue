@@ -1,7 +1,7 @@
 <template> 
 
   <swiper
-  class="swiper max-w-screen-xl"
+  class=" max-w-screen-xl"
   :modules="modules"
   slides-per-view="auto"
   :space-between="5"
@@ -17,9 +17,9 @@
       <div class="absolute inset-0 bg-black opacity-40"></div>
       <div class="absolute inset-0 flex flex-col justify-end px-6 py-4">
         <h3 class="text-xl font-bold text-white mb-2">{{project.name}}</h3>
-        <p class="text-gray-300 text-sm mb-4">{{project.description}}</p>
+        <p class="text-gray-300  mb-4">{{project.description}}</p>
         <div class="flex justify-end">
-          <Link class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded shadow" as="button" :href="'/projects/' + project.id">Visit</Link>
+          <Link class="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded shadow" as="button" :href="'/projects/' + project.id">Visit</Link>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@
 <style>
 
 .swiper{
-  padding: 40px;
+  
 }
   .swiper-slide{
     background: rgba(255,255,255,0.9);
