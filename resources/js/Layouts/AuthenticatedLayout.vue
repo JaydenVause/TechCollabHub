@@ -192,10 +192,10 @@ const showingNavigationDropdown = ref(false);
                     <div class="w-full md:w-1/4 lg:w-1/6">
                       <h4 class="text-lg font-bold mb-4 text-gray-100">Links</h4>
                       <ul>
-                        <li><Link href="/" class="text-gray-400 hover:text-white transition-colors duration-300">Home</Link></li>
-                        <li><Link href="/about" class="text-gray-400 hover:text-white transition-colors duration-300">About Us</Link></li>
-                        <li><Link href="/services" class="text-gray-400 hover:text-white transition-colors duration-300">Services</Link></li>
-                        <li><Link href="/contact" class="text-gray-400 hover:text-white transition-colors duration-300">Contact Us</Link></li>
+                        <li><Link :href="route('dashboard')" class="text-gray-400 hover:text-white transition-colors duration-300">Home</Link></li>
+                        <li><Link :href="route('about')" class="text-gray-400 hover:text-white transition-colors duration-300">About Us</Link></li>
+                        <li><Link :href="route('services')" class="text-gray-400 hover:text-white transition-colors duration-300">Services</Link></li>
+                        <li><Link :href="route('contact')" class="text-gray-400 hover:text-white transition-colors duration-300">Contact Us</Link></li>
                       </ul>
                     </div>
                     
