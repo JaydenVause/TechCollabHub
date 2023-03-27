@@ -11,7 +11,7 @@ const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
-    <Head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"></Head>
+    
     <div>
         <div class="min-h-screen bg-gray-800">
             <nav class="bg-gray-800 border-b border-gray-100 fixed w-full z-10">

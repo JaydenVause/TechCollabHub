@@ -4,7 +4,7 @@ import { Link, Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"></Head>
+   
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-800">
         <div>
             <Link href="/">

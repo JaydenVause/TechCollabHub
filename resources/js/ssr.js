@@ -7,16 +7,6 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 const appName = 'Laravel';
 
-
-
-function formatHttpToPageProtocol(url){
-    
-        url.replace('http:', 'https:');
-    
-
-    return url;
-}
-
 createServer((page) =>
     createInertiaApp({
         page,
@@ -28,7 +18,7 @@ createServer((page) =>
                 .use(plugin)
                 .use(ZiggyVue, {
                     ...page.props.ziggy,
-                    location: formatHttpToPageProtocol(url),
+                    location: new URL(page.props.ziggy.location),
                 });
         },
     })
