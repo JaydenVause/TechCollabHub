@@ -16,8 +16,8 @@
       <img class="object-cover w-full h-64" :src="'/project-images/'+project.image" alt="Project Image">
       <div class="absolute inset-0 bg-black opacity-40"></div>
       <div class="absolute inset-0 flex flex-col justify-end px-6 py-4">
-        <h3 class="text-xl font-bold text-white mb-2">{{project.name}}</h3>
-        <p class="text-gray-300  mb-4">{{project.description}}</p>
+        <h3 class="text-xl font-bold text-white mb-2">{{project.name.substr(0, 20) + '...'}}</h3>
+        <p class="text-gray-300  mb-4">{{project.description.substr(0, 20) + '...'}}</p>
         <div class="flex justify-end">
           <Link class="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded shadow" as="button" :href="'/projects/' + project.id">Visit</Link>
         </div>
