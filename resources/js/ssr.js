@@ -10,9 +10,9 @@ const appName = 'Laravel';
 
 
 function formatHttpToPageProtocol(url){
-    if(window.location.protocol = "https:"){
-        url.replace('http:', 'https:')
-    }
+    
+        url.replace('http:', 'https:');
+    
 
     return url;
 }
