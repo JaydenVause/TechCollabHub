@@ -1,5 +1,6 @@
 <template>
 <AuthenticatedLayout>
+  <Head title="About" />
    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="text-center">
       <h1 class="text-4xl font-bold mb-6 text-white">About Our Application</h1>
@@ -51,4 +52,5 @@
 
 <script setup>
   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+  import {Head} from '@inertiajs/vue3';
 </script>

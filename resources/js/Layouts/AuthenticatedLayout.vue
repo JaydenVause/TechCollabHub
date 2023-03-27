@@ -5,12 +5,13 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, Head } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
+    <Head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"></Head>
     <div>
         <div class="min-h-screen bg-gray-800">
             <nav class="bg-gray-800 border-b border-gray-100 fixed w-full z-10">
